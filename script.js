@@ -13,9 +13,8 @@ function todoList () {
         displayList(tasksList)
         addListElement(tasksList)
         deleteListElement(tasksList);
-        checkedElement(tasksList)
-        todoTasksFilter();
-        doneTasksFilter()
+        checkedElement()
+        tasksFilter();
     });
 };
 
@@ -58,6 +57,7 @@ function addListElement (list) {
         }
         list.push(task)
         displayList(list)
+        deleteListElement(list)
     });
 }
 
@@ -72,7 +72,7 @@ function deleteListElement (list) {
     })
 }
 
-function checkedElement (list) {
+function checkedElement () {
     let checkboxs = document.querySelectorAll(".form-check-input");
     checkboxs.forEach((checkbox, i) => {
         checkbox.addEventListener("change", function (e) {
@@ -86,25 +86,35 @@ function checkedElement (list) {
     })
 }
 
-function todoTasksFilter () {
-let todoFilter = document.querySelectorAll(".btn-outline-primary")
-todoFilter.forEach((filter, i) => {
+function tasksFilter () {
+let taskFilter = document.querySelectorAll(".btn-outline-primary")
+taskFilter.forEach((filter, i) => {
     filter.addEventListener("click", function (e) {
         e.preventDefault()
         let activeBtn = document.querySelector(".btn-outline-primary.active")
         activeBtn.classList.remove("active")
         filter.classList.add("active")
+        showTasksFilter(filter);
     })
 })
 }
 
-
 //Essayer : masquer toutes les tâches PUIS afficher que celles que je souhaite
-function doneTasksFilter () {
+function showTasksFilter (filter) {
+    let allTasks = document.querySelector(".list-group")
+        if (filter.dataset.filter === "done") {
+            allTasks.classList.add("hide-task-todo")
+            allTasks.classList.remove("hide-task-completed")
+        } else if (filter.dataset.filter === "todo") {
+            allTasks.classList.add("hide-task-completed")
+            allTasks.classList.remove("hide-task-todo")
+        } else {
+            allTasks.classList.remove("hide-task-todo")
+            allTasks.classList.remove("hide-task-completed")
+        }
 //Lors du clique sur "faites"
 //afficher seulement les element AVEC la class "done"
 //cacher les autres avec display none
 }
 
-//Ensuite gérer la class "active" selon sur quel filtre on est.
 todoList();
